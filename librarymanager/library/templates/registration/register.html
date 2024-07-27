@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+  </head>
+  <body>
+    <h1>Register</h1>
+    
+    {% if user.is_authenticated %} 
+    {% if user.is_superuser %}
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Register</button>
+    </form>
+    {% else  %}
+        <div>You are not allowed to register a user!</div>
+    
+    {% endif %}
+    {% endif %}
+    <a href="{% url 'login' %}">Login</a>
+    
+  </body>
+</html>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Library Books</h1>
+  <!-- Search Form -->
+  <form method="get">
+    <input type="text" name="search" placeholder="Search..." value="{{ request.GET.search }}">
+    <button type="submit">Search</button>
+</form>
+
+<!-- Filter Form -->
+<form method="get">
+    <label for="genre">Filter by Genre:</label>
+    <select name="genre" id="genre">
+        <option value="">All Genres</option>
+        {% for genre in genre %}
+            <option value="{{ genre.genre_id }}" {% if request.GET.genre == genre.genre_id|stringformat:"s" %}selected{% endif %}>{{ genre.name }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="status">Filter by Status:</label>
+    <select name="status" id="status">
+        <option value="">All Statuses</option>
+        {% for choice in status %}
+            <option value="{{ choice.0 }}" {% if request.GET.status == choice.0|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+  
+<ul>
+  {% for book in books %}
+      <li>
+          <a href="{% url 'book_detail' book.book_id %}">{{ book.title }}</a> by {{ book.author.name }} -  {{ book.status }}
+      </li>
+  {% empty %}
+      <li>No books found.</li>
+  {% endfor %}
+</ul>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}

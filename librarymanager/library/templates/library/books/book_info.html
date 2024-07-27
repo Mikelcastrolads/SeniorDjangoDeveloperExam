@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% load user_extras %} {% block content %}
+<h1>{{ book.title }}</h1>
+<p>Author: {{ book.author }}</p>
+<p>Publication Year: {{ book.publication_year }}</p>
+<p>ISBN: {{ book.isbn }}</p>
+<p>Genre: {% for genre in book.genre.all %}{{ genre }} {% endfor %}</p>
+<p>Status: {{ book.get_status_display }}</p>
+
+{% if user.is_authenticated %} {% if book.status == 'available' %}
+<form method="post" action="{% url 'borrow_book' book.book_id %}">
+  {% csrf_token %}
+  <button type="submit">Borrow Book</button>
+</form>
+{% else %}
+<form method="post" action="{% url 'return_book' book.book_id %}">
+  {% csrf_token %}
+  <button type="submit">Return Book</button>
+</form>
+{% endif %} {% endif %} 
+{% if user.is_authenticated %} {% if user.is_superuser or user|in_group:"Librarians" %}
+<a href="{% url 'edit_book' book.book_id %}">Edit Book</a>
+<a href="{% url 'delete_book' book.book_id %}">Delete Book</a>
+{% endif %} {% endif %} {% endblock %}

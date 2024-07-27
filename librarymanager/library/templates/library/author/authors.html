@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Author List</h1>
+<a href="{% url 'add_author' %}">Add New Author</a>
+<ul>
+  {% for author in authors %}
+  <li>
+    {% comment %} <a>{{ author.name }}</a> {% endcomment %}
+    <a href="{% url 'author_detail' author.author_id %}">{{ author.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+<div>
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  <div>
+    <span
+      >Next: {% if page_obj.has_next %}<a
+        href="?page={{ page_obj.next_page_number }}"
+        >Next</a
+      >{% endif %}</span
+    >
+    <span
+      >Previous: {% if page_obj.has_previous %}<a
+        href="?page={{ page_obj.previous_page_number }}"
+        >Previous</a
+      >{% endif %}</span
+    >
+  </div>
+</div>
+{% endblock %}

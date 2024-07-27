@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% load user_extras %} {% block content %}
+<h1>Author Detail</h1>
+<h2>{{ author.name }}</h2>
+<p><strong>Biography:</strong> {{ author.biography }}</p>
+<p><strong>Nationality:</strong> {{ author.nationality }}</p>
+
+<a href="{% url 'author_list' %}">Back to Author List</a>
+{% if user.is_authenticated %} {% if user.is_superuser or suser|in_group:"Librarians" %}
+<a href="{% url 'edit_author' author.author_id %}">Edit Author</a>
+<a href="{% url 'delete_author' author.author_id %}">Delete Author</a>
+{% endif %} {% endif %} {% endblock %}

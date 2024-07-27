@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% load user_extras %} {% block content %}
+<h1>Genres</h1>
+<ul>
+  {% for genre in genres %}
+  <li>{{ genre.name }}</li>
+  {% endfor %}
+</ul>
+{% if user.is_authenticated %} {% if user.is_superuser or user|in_group:"Librarians" %}
+<a href="{% url 'add_genre' %}">Add Genre</a>
+{% endif %} {% endif %}
+<a href="{% url 'book_list' %}">Home</a>
+{% endblock %}
